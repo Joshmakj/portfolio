@@ -270,57 +270,56 @@
   </div>
 </section>
 <!-- ==== Contact Section ==== -->
-<section id="contact" class="section" style="background-color:#0e1111; padding:70px 40px; color:#fff;">
-  <div class="contact-container" style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:30px; max-width:1100px; margin:auto;">
-    
+<section id="contact" class="section">
+  <div class="contact-container">
     <!-- Left: Info -->
-    <div class="contact-info" style="flex:1; min-width:300px;">
-      <h2 style="font-size:30px; font-weight:800; font-family:'Montserrat',sans-serif;">Let's Work <span style="color:#78d13d;">Together</span></h2>
-      <p style="margin:15px 0 30px; color:#ccc; line-height:1.7;">
+    <div class="contact-info">
+      <h2>Let's Work <span>Together</span></h2>
+      <p>
         I’m open to exciting collaborations and freelance work. Let’s build something amazing together!
       </p>
 
-      <div style="display:flex; align-items:center; gap:12px; margin-bottom:15px;">
-        <i class="fa-solid fa-phone" style="font-size:20px; color:#78d13d;"></i>
-        <div>
-          <h4 style="margin:0; color:#78d13d;">Phone</h4>
-          <p style="margin:2px 0;">(+91) 98765 43210</p>
+      <div class="contact-card">
+        <div class="contact-item">
+          <i class="fa-solid fa-phone"></i>
+          <div>
+            <h4>Phone</h4>
+            <p>(+91) 98765 43210</p>
+          </div>
         </div>
-      </div>
 
-      <div style="display:flex; align-items:center; gap:12px; margin-bottom:15px;">
-        <i class="fa-solid fa-envelope" style="font-size:20px; color:#78d13d;"></i>
-        <div>
-          <h4 style="margin:0; color:#78d13d;">Email</h4>
-          <p style="margin:2px 0;">joshmakj@gmail.com</p>
+        <div class="contact-item">
+          <i class="fa-solid fa-envelope"></i>
+          <div>
+            <h4>Email</h4>
+            <p>joshmakj@gmail.com</p>
+          </div>
         </div>
-      </div>
 
-      <div style="display:flex; align-items:center; gap:12px;">
-        <i class="fa-solid fa-location-dot" style="font-size:20px; color:#78d13d;"></i>
-        <div>
-          <h4 style="margin:0; color:#78d13d;">Address</h4>
-          <p style="margin:2px 0;">Kuzhupilly, Ernakulam, Kerala</p>
+        <div class="contact-item">
+          <i class="fa-solid fa-location-dot"></i>
+          <div>
+            <h4>Address</h4>
+            <p>Kuzhupilly, Ernakulam, Kerala</p>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Right: Form -->
-    <div class="contact-form" style="flex:1; min-width:320px; background:#161a1d; padding:30px; border-radius:14px; box-shadow:0 0 15px rgba(120,209,61,0.15);">
-      <h3 style="font-size:24px; font-weight:700; text-align:center; margin-bottom:25px;">
-        Contact <span style="color:#78d13d;">Me!</span>
-      </h3>
+    <div class="contact-form">
+      <h3>Contact <span>Me!</span></h3>
       <form action="https://api.web3forms.com/submit" method="post">
         <input type="hidden" name="access_key" value="c6e68daa-84b0-40fb-a70f-91fb22b63c96">
         <div class="form-row">
-          <input type="text" placeholder="Full Name" required>
-          <input type="email" placeholder="Email Address" required>
+          <input name="name" type="text" placeholder="Full Name" required>
+          <input name="email" type="email" placeholder="Email Address" required>
         </div>
         <div class="form-row">
-          <input type="text" placeholder="Phone Number" required>
-          <input type="text" placeholder="Email Subject" required>
+          <input name="phone" type="text" placeholder="Phone Number" required>
+          <input name="subject" type="text" placeholder="Subject" required>
         </div>
-        <textarea placeholder="Your Message" rows="4" required></textarea>
+        <textarea name="message" placeholder="Your Message" rows="4" required></textarea>
         <button type="submit" id="bbb">Send Message</button>
       </form>
     </div>
