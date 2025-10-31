@@ -6,42 +6,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Sidebar toggle (safe guard)
   if (toggleBtn && sidebar) {
-    toggleBtn.addEventListener("click", () => sidebar.classList.toggle("active"));
+    toggleBtn.addEventListener("click", () => {
+      sidebar.classList.toggle("active");
+      document.body.classList.toggle("sidebar-open", sidebar.classList.contains("active"));
+    });
+  }
+
+  // Helper: hide all main sections + container
+  function hideAll() {
+    sections.forEach(sec => {
+      const el = document.getElementById(sec);
+      if (el) el.style.display = "none";
+    });
+    const mainContainer = document.querySelector(".container");
+    if (mainContainer) mainContainer.style.display = "none";
   }
 
   // Section navigation (links in sidebar)
   links.forEach(link => {
     link.addEventListener("click", (e) => {
       e.preventDefault();
-      const target = link.textContent.trim().toLowerCase();
+      // read only visible text (icon <i> won't affect .trim())
+      const target = (link.textContent || "").trim().toLowerCase();
 
-      // Hide all sections and container
-      sections.forEach(sec => {
-        const el = document.getElementById(sec);
-        if (el) el.style.display = "none";
-      });
-      const mainContainer = document.querySelector(".container");
-      if (mainContainer) mainContainer.style.display = "none";
+      hideAll();
 
-      // Show target section or home
       if (target === "home") {
+        const mainContainer = document.querySelector(".container");
         if (mainContainer) mainContainer.style.display = "flex";
       } else {
         const sec = document.getElementById(target);
         if (sec) {
           sec.style.display = "block";
-          // add class to trigger entrance animations
           sec.classList.add('show');
+          if (target === 'about') animateSkillBars();
         }
       }
 
-      // if about shown, animate skill bars
-      if (target === 'about') {
-        animateSkillBars();
+      // Close sidebar after click
+      if (sidebar) {
+        sidebar.classList.remove("active");
+        document.body.classList.remove("sidebar-open");
       }
 
-      // Close sidebar after click
-      if (sidebar) sidebar.classList.remove("active");
+      // keep user at top of the new section
+      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 60);
     });
   });
 
@@ -75,14 +84,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const hireMeBtn = document.getElementById("hireMeBtn");
   if (hireMeBtn) {
     hireMeBtn.addEventListener("click", () => {
-      sections.forEach(sec => {
-        const el = document.getElementById(sec);
-        if (el) el.style.display = "none";
-      });
+      hideAll();
       const contactSection = document.getElementById("contact");
-      const mainContainer = document.querySelector(".container");
-      if (mainContainer) mainContainer.style.display = "none";
-      if (contactSection) contactSection.style.display = "block";
+      if (contactSection) {
+        contactSection.style.display = "block";
+        contactSection.classList.add('show');
+      }
+      if (sidebar) {
+        sidebar.classList.remove("active");
+        document.body.classList.remove("sidebar-open");
+      }
+      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 80);
     });
   }
 
@@ -90,14 +102,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const projectsBtn = document.getElementById("projectsBtn");
   if (projectsBtn) {
     projectsBtn.addEventListener("click", () => {
-      sections.forEach(sec => {
-        const el = document.getElementById(sec);
-        if (el) el.style.display = "none";
-      });
+      hideAll();
       const projectsSection = document.getElementById("projects");
-      const mainContainer = document.querySelector(".container");
-      if (mainContainer) mainContainer.style.display = "none";
-      if (projectsSection) projectsSection.style.display = "block";
+      if (projectsSection) {
+        projectsSection.style.display = "block";
+        projectsSection.classList.add('show');
+      }
+      if (sidebar) {
+        sidebar.classList.remove("active");
+        document.body.classList.remove("sidebar-open");
+      }
+      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 80);
     });
   }
 
@@ -144,12 +159,14 @@ document.addEventListener('DOMContentLoaded', () => {
     about.classList.add('show');
 
     const bars = about.querySelectorAll('.skill-bar');
-    bars.forEach(bar => {
+    bars.forEach((bar, i) => {
       const percent = parseInt(bar.getAttribute('data-percent') || '0', 10);
       const inner = bar.querySelector('i');
       if (inner) {
         // small delay for stagger effect
-        const delay = 120 * Array.from(bars).indexOf(bar);
+        const delay = 120 * i;
+        // reset before animating (allows repeat)
+        inner.style.width = '0%';
         setTimeout(() => {
           inner.style.width = percent + '%';
         }, delay);
@@ -158,7 +175,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // If About is visible on load, animate
-  if (document.getElementById('about') && document.getElementById('about').style.display !== 'none') {
+  const aboutOnLoad = document.getElementById('about');
+  if (aboutOnLoad && aboutOnLoad.style.display !== 'none') {
     animateSkillBars();
   }
 
@@ -166,22 +184,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const aboutContactBtn = document.getElementById('aboutContactBtn');
   if (aboutContactBtn) {
     aboutContactBtn.addEventListener('click', () => {
-      sections.forEach(sec => {
-        const el = document.getElementById(sec);
-        if (el) el.style.display = "none";
-      });
+      hideAll();
       const contactSection = document.getElementById("contact");
-      const mainContainer = document.querySelector(".container");
-      if (mainContainer) mainContainer.style.display = "none";
-      if (contactSection) contactSection.style.display = "block";
-
-
-
-
-
-});  }    });      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 80);      // scroll to top of contact      // scroll to top of contact
+      if (contactSection) {
+        contactSection.style.display = "block";
+        contactSection.classList.add('show');
+      }
+      if (sidebar) {
+        sidebar.classList.remove("active");
+        document.body.classList.remove("sidebar-open");
+      }
       setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 80);
     });
   }
-
 });
