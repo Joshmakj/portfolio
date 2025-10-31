@@ -719,196 +719,20 @@ body {
   .about-bio { text-align: center; }
   .about-cta { justify-content: center; }
 }
-/* ...existing code... */
-#skills {
-  display: none;
-  background: #000;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 25px;
-  width: 90%;
-  max-width: 900px;
-  justify-items: center;
-  margin: auto;
-}
-
-.skill-card {
-  background: rgba(20, 20, 20, 0.8);
-  border: 2px solid transparent;
-  border-radius: 15px;
-  padding: 25px 10px;
-  text-align: center;
-  font-weight: 600;
-  color: #fff;
-  transition: all 0.4s ease;
-  width: 130px;
-  height: 130px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.skill-card:hover {
-  border: 2px solid #78d13d;
-  box-shadow: 0 0 20px #78d13d;
-  transform: translateY(-5px);
-}
-
-.skill-card img {
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
-  margin-bottom: 10px;
-  filter: drop-shadow(0 0 2px #78d13d);
-}
-
-.skill-card p {
-  font-size: 14px;
-  color: #78d13d;
-  font-weight: 500;
-}
-/* ==== Education Section ==== */
-section#education {
-  padding: 80px 0;
-  background-color: #0b0b0c;
-  color: #f5f5f5;
- 
-}
-
-section#education h2 {
-  text-align: center;
-  font-family: 'Montserrat';
-  font-weight: 800;
-  font-size: 40px;
-  margin-bottom: 60px;
-}
-
-section#education h2 span {
-  color: var(--accent);
-}
-
-/* Timeline */
-.edu-timeline {
-  position: relative;
-  max-width: 900px;
-  margin: auto;
-  padding: 20px 0;
-}
-
-.edu-timeline::after {
-  content: '';
-  position: absolute;
-  width: 3px;
-  background-color: var(--accent);
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  margin-left: -1.5px;
-}
-
-.edu-box {
-  padding: 20px 40px;
-  position: relative;
-  width: 50%;
-}
-
-.edu-content {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 0 15px rgba(120,209,61,0.15);
-}
-
-.edu-box.left {
-  left: 0;
-}
-
-.edu-box.right {
-  left: 50%;
-}
-
-/* The circle icon */
-.edu-box::after {
-  content: "\f501"; /* Font Awesome student icon (user-graduate) */
-  font-family: "Font Awesome 6 Free";
-  font-weight: 900;
-  position: absolute;
-  width: 32px;
-  height: 32px;
-  background-color: var(--accent);
-  color: #0b0b0c;
-  border: 2px solid #0b0b0c;
-  border-radius: 50%;
-  top: 20px;
-  right: -16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  z-index: 1;
-  box-shadow: 0 0 15px rgba(120,209,61,0.5);
-}
-
-.edu-box.right::after {
-  left: -16px;
-}
-
-.edu-content h3 {
-  font-size: 20px;
-  color: var(--accent);
-  font-family: "Montserrat";
-  font-weight: 700;
-  margin-bottom: 5px;
-}
-
-.edu-content p {
-  color: #ccc;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-/* Responsive */
-@media screen and (max-width: 768px) {
-  .edu-timeline::after {
-    left: 31px;
-  }
-
-  .edu-box {
-    width: 100%;
-    padding-left: 70px;
-    padding-right: 25px;
-  }
-
-  .edu-box.right {
-    left: 0%;
-  }
-
-  .edu-box::after {
-    left: 15px;
-  }
-}
-
-/* ==== Projects Section ==== */
+/* PROJECTS: 3 cards per row, more breathing room */
 #projects {
   background: #0b0b0c;
-  padding: 80px 40px;
+  padding: 100px 40px; /* more vertical space */
   border-radius: 20px;
 }
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(3, 1fr); /* 3 cards in a row on wide screens */
+  gap: 32px; /* more space between cards */
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: start;
 }
 
 .project-card {
@@ -916,72 +740,40 @@ section#education h2 span {
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 16px;
   overflow: hidden;
-  transition: 0.4s;
-  box-shadow: 0 5px 30px rgba(0,0,0,0.5);
+  transition: transform 360ms ease, box-shadow 360ms ease;
+  box-shadow: 0 6px 30px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
 }
 
-.project-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 0 25px rgba(120,209,61,0.3);
-  border-color: rgba(120,209,61,0.3);
-}
-
+/* slightly taller image for nicer card proportions */
 .project-card img {
   width: 100%;
-  height: 170px;
+  height: 220px;
   object-fit: cover;
 }
 
+/* ensure project-info fills remaining space for consistent card height */
 .project-info {
-  padding: 18px;
+  padding: 20px;
+  flex: 1 1 auto;
 }
 
-.project-info h3 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-family: "Montserrat";
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 8px;
+/* Responsive breakpoints */
+@media (max-width: 1100px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+  .project-card img { height: 200px; }
 }
 
-.project-info p {
-  color: #aaa;
-  font-size: 13px;
-  line-height: 1.6;
-  margin-bottom: 10px;
-}
-
-.github-btn {
-  display: inline-block;
-  padding: 6px 14px;
-  background: linear-gradient(90deg, #78d13d, #5fc02d);
-  color: #0b0b0c;
-  font-weight: 700;
-  font-size: 13px;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: 0.3s;
-}
-
-.github-btn:hover {
-  opacity: 0.9;
-}
-
-/* Modern Floating Arrow Animation */
-.project-card .arrow i {
-  color: #78d13d;
-  font-size: 18px;
-  transform: translateX(-10px);
-  transition: all 0.4s ease;
-  opacity: 0;
-}
-
-.project-card:hover .arrow i {
-  transform: translateX(8px);
-  opacity: 1;
-  filter: drop-shadow(0 0 5px #78d13d);
+@media (max-width: 720px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .project-card img { height: 180px; }
 }
 
 /* ==== Contact Section (Smaller Version) ==== */
