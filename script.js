@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-/* ---------- Page Loader: high-density star field (15s, small stars) ---------- */
+/* ---------- Page Loader: center-burst starfield (fast outward burst) ---------- */
 (function initPageLoader() {
   const overlay = document.getElementById('loader-overlay');
   const canvas = document.getElementById('loader-canvas');
@@ -210,17 +210,15 @@ document.addEventListener('DOMContentLoaded', () => {
   let W = 0, H = 0;
   let particles = [];
   let raf = null;
-  let mouse = { x: -9999, y: -9999 };
-
-  const LOADER_DURATION = 15000; // 15 seconds
+  const LOADER_DURATION = 35000; // 35s max
   let hideTimeout = null;
+  const CENTER = { x: 0, y: 0 };
 
-  // compute particle count (thousands on large screens), but keep them very small
+  // number of particles (auto-scale)
   function particleCountForSize(w, h) {
     const area = w * h;
-    // one particle per ~80k px -> yields 1000-2500 depending on screen
-    const count = Math.round(area / 80000);
-    return Math.min(Math.max(1000, count), 3500); // clamp 1000..3500
+    const base = Math.round(area / 90000);
+    return Math.min(Math.max(1200, base), 3500);
   }
 
   function resize() {
@@ -232,6 +230,8 @@ document.addEventListener('DOMContentLoaded', () => {
     canvas.style.width = W + 'px';
     canvas.style.height = H + 'px';
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    CENTER.x = W / 2;
+    CENTER.y = H / 2;
     createParticles();
   }
 
@@ -239,77 +239,80 @@ document.addEventListener('DOMContentLoaded', () => {
     const count = particleCountForSize(W, H);
     particles = new Array(count);
     for (let i = 0; i < count; i++) {
-      // very small stars
-      const r = 0.4 + Math.random() * 1.6; // core radius (px)
+      // burst: start exactly at center with random direction & fast speed
+      const angle = Math.random() * Math.PI * 2;
+      // speed distribution biased toward faster speeds for burst effect
+      const speed = 1.6 + Math.random() * 3.6; // px per frame
+      const vx = Math.cos(angle) * speed;
+      const vy = Math.sin(angle) * speed;
+      const core = 0.4 + Math.random() * 1.4; // small cores
+      // mostly white with slight warm tint on some
+      const hue = Math.random() < 0.86 ? 50 + Math.random() * 30 : 210 + Math.random() * 20;
       particles[i] = {
-        x: Math.random() * W,
-        y: Math.random() * H,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        r: r,
-        hue: Math.random() < 0.82 ? 60 + Math.random() * 30 : 200 + Math.random() * 30, // mostly warm yellow, some bluish
-        alpha: 0.5 + Math.random() * 0.9,
-        tw: Math.random() * Math.PI * 2,
-        twS: 0.006 + Math.random() * 0.014
+        x: CENTER.x,
+        y: CENTER.y,
+        vx,
+        vy,
+        r: core,
+        hue,
+        alpha: 0.7 + Math.random() * 0.6,
+        life: 0,
+        maxLife: 60 + Math.round(Math.random() * 140) // frames before respawn
       };
     }
   }
 
-  // pointer interaction (soft parallax)
-  window.addEventListener('mousemove', (e) => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-  }, { passive: true });
-  window.addEventListener('touchstart', (e) => {
-    const t = e.touches[0];
-    mouse.x = t.clientX;
-    mouse.y = t.clientY;
-  }, { passive: true });
+  // respawn particle at center with random direction (keeps continuous burst)
+  function respawn(p) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 1.2 + Math.random() * 4.0;
+    p.x = CENTER.x;
+    p.y = CENTER.y;
+    p.vx = Math.cos(angle) * speed;
+    p.vy = Math.sin(angle) * speed;
+    p.r = 0.4 + Math.random() * 1.4;
+    p.hue = Math.random() < 0.86 ? 50 + Math.random() * 30 : 210 + Math.random() * 20;
+    p.alpha = 0.6 + Math.random() * 0.6;
+    p.life = 0;
+    p.maxLife = 60 + Math.round(Math.random() * 140);
+  }
 
   function draw() {
     ctx.clearRect(0, 0, W, H);
-
-    // pure black background for strong contrast
+    // pure black background
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, W, H);
 
-    // draw stars (small radial gradients for glow)
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
 
-      // twinkle factor
-      p.tw += p.twS;
-      const flick = 0.6 + Math.sin(p.tw) * 0.6;
+      // advance
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life++;
 
-      // subtle movement + pointer parallax
-      if (mouse.x > -9000) {
-        const dx = (mouse.x - W * 0.5) * 0.00006;
-        const dy = (mouse.y - H * 0.5) * 0.00006;
-        p.x += p.vx + dx * (Math.random() * 6);
-        p.y += p.vy + dy * (Math.random() * 6);
-      } else {
-        p.x += p.vx;
-        p.y += p.vy;
-      }
+      // twinkle + fade out toward end of life
+      const lifeT = p.life / p.maxLife;
+      const flick = 0.7 + Math.sin(p.life * 0.08 + i) * 0.35;
+      const alpha = Math.max(0, p.alpha * (1 - lifeT) * flick);
 
-      // wrap around
-      if (p.x < -10) p.x = W + 10;
-      if (p.x > W + 10) p.x = -10;
-      if (p.y < -10) p.y = H + 10;
-      if (p.y > H + 10) p.y = -10;
-
-      const size = Math.max(0.4, p.r * flick);
-      // star core (bright)
-      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, size * 6);
-      const colorCenter = `hsla(${p.hue}, 95%, 70%, ${Math.min(1, p.alpha)})`;
-      const colorMid = `hsla(${p.hue}, 80%, 55%, ${Math.min(0.35, p.alpha * 0.45)})`;
-      grad.addColorStop(0, colorCenter);
-      grad.addColorStop(0.15, colorMid);
+      // draw small glowing star
+      const size = Math.max(0.3, p.r * (1 + lifeT * 0.6));
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, size * 5);
+      const centerColor = `hsla(${p.hue}, 95%, 85%, ${alpha})`;
+      const midColor = `hsla(${p.hue}, 85%, 55%, ${alpha * 0.35})`;
+      grad.addColorStop(0, centerColor);
+      grad.addColorStop(0.18, midColor);
       grad.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = grad;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, Math.max(1, size * 4), 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, Math.max(1, size * 3), 0, Math.PI * 2);
       ctx.fill();
+
+      // if particle is out of bounds or life ended, respawn back at center for continuous burst
+      if (p.life > p.maxLife || p.x < -20 || p.x > W + 20 || p.y < -20 || p.y > H + 20) {
+        respawn(p);
+      }
     }
 
     raf = requestAnimationFrame(draw);
@@ -320,7 +323,6 @@ document.addEventListener('DOMContentLoaded', () => {
     resize();
     draw();
 
-    // set auto-hide after LOADER_DURATION if still visible
     if (hideTimeout) clearTimeout(hideTimeout);
     hideTimeout = setTimeout(() => {
       hideOverlay();
@@ -330,18 +332,14 @@ document.addEventListener('DOMContentLoaded', () => {
   function hideOverlay() {
     if (!overlay) return;
     overlay.classList.add('hidden');
-    // give fade time, then remove canvas and listeners
     setTimeout(() => {
       cancelAnimationFrame(raf);
-      // cleanup listeners
-      window.removeEventListener('mousemove', () => {});
-      window.removeEventListener('touchstart', () => {});
       window.removeEventListener('resize', resize);
-      try { overlay.remove(); } catch (e) { /* ignore */ }
+      try { overlay.remove(); } catch (e) {}
     }, 600);
   }
 
-  // hide early if page fully loads
+  // hide early if page finishes loading
   window.addEventListener('load', () => {
     hideOverlay();
     if (hideTimeout) clearTimeout(hideTimeout);
@@ -349,6 +347,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('resize', resize, { passive: true });
 
-  // start
+  // start immediately
   start();
 })();
