@@ -533,45 +533,52 @@ body {
   .stats { justify-content: center; }
 }
 .about-section {
-  display: none;
+  display: none; /* shown by script when user opens About */
   min-height: 100vh;
-  background: linear-gradient(180deg, #0e1111 0%, #0a0c0a 100%);
-  padding: 100px 50px;
+  background: linear-gradient(180deg,#0e1111 0%, #0a0c0a 100%);
+  padding: 100px 40px;
   color: var(--text);
-  animation: fadeSlideIn 0.8s ease forwards;
+  animation: fadeSlideIn 0.6s ease forwards;
 }
 
 .about-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 60px;
   max-width: 1100px;
   margin: 0 auto;
+  display: flex;
+  gap: 60px;
+  align-items: center;
+  justify-content: space-between;
   flex-wrap: wrap;
 }
 
+/* left column (image) */
+.about-left {
+  flex: 0 0 360px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .about-left img {
   width: 360px;
   height: 360px;
   border-radius: 20px;
   object-fit: cover;
   border: 3px solid var(--accent);
-  box-shadow: 0 0 30px rgba(120,209,61,0.25);
+  box-shadow: 0 20px 60px rgba(120,209,61,0.08);
 }
 
+/* right column (text) */
 .about-right {
-  max-width: 700px; /* give about text more room */
+  flex: 1;
+  min-width: 280px;
 }
-
 .about-right h2 {
-  font-family: "Montserrat";
+  font-family: "Montserrat", sans-serif;
   font-size: 36px;
   font-weight: 800;
   margin-bottom: 20px;
   color: var(--accent);
 }
-
 .about-bio {
   font-size: 15px;
   line-height: 1.8;
@@ -579,12 +586,13 @@ body {
   margin-bottom: 30px;
 }
 
+/* info grid */
 .about-info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px 40px;
+  margin-top: 10px;
 }
-
 .about-info-grid div {
   background: rgba(255,255,255,0.03);
   border: 1px solid rgba(255,255,255,0.05);
@@ -594,28 +602,26 @@ body {
   color: var(--text);
 }
 
-@keyframes fadeSlideIn {
-  from {opacity: 0; transform: translateY(40px);}
-  to {opacity: 1; transform: translateY(0);}
-}
-
-@media(max-width: 850px){
-  .about-container { flex-direction: column; text-align: center; }
-  .about-left img { width: 250px; height: 250px; }
-  .about-info-grid { grid-template-columns: 1fr; }
-}
-
-
-/* Responsive */
-@media(max-width:768px){
-  .about-container{
-    flex-direction:column;
-    text-align:center;
+/* Responsive adjustments */
+@media (max-width: 850px) {
+  .about-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 30px;
+    padding: 0 10px;
   }
-  .about-details{
-    max-width:90%;
+  .about-left img {
+    width: 250px;
+    height: 250px;
   }
+  .about-info-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .about-right h2 { text-align: center; }
+  .about-bio { text-align: center; }
 }
+/* ...existing code... */
 #skills {
   display: none;
   background: #000;
