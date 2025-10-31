@@ -84,7 +84,6 @@ if (hireMeBtn) {
   });
 }
 
-
 // "Projects" button opens Projects section instantly
 const projectsBtn = document.getElementById("projectsBtn");
 if (projectsBtn) {
@@ -103,3 +102,57 @@ if (projectsBtn) {
     }
   });
 }
+
+// Role rotation animation for the profile card
+(function rotateProfileRole() {
+  const roleEl = document.querySelector('.card .role');
+  if (!roleEl) return;
+
+  const roles = [
+    "Python Full Stack Developer",
+    "Front End Developer",
+    "Web Developer",
+    "Software Developer"
+  ];
+
+  let idx = 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+})();  }, duration);    }, fadeTime);      setTimeout(() => roleEl.classList.remove('fade-in'), fadeTime);      // cleanup fade-in class after animation      roleEl.classList.add('fade-in');      roleEl.classList.remove('fade-out');      roleEl.textContent = roles[idx];      idx = (idx + 1) % roles.length;    setTimeout(() => {    // after fade out, change text and fade back in    roleEl.classList.add('fade-out');    // fade out  setInterval(() => {  const fadeTime = 350;  // must match CSS transition  const duration = 3000; // total time each role is visible (ms)  let idx = 0;
+  const duration = 3000; // total time each role is visible (ms)
+  const fadeTime = 350;  // must match CSS transition
+
+  setInterval(() => {
+    // fade out
+    roleEl.classList.add('fade-out');
+
+    // after fade out, change text and fade back in
+    setTimeout(() => {
+      idx = (idx + 1) % roles.length;
+      roleEl.textContent = roles[idx];
+      roleEl.classList.remove('fade-out');
+      roleEl.classList.add('fade-in');
+
+      // cleanup fade-in class after animation
+      setTimeout(() => roleEl.classList.remove('fade-in'), fadeTime);
+    }, fadeTime);
+  }, duration);
+})();

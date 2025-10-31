@@ -334,7 +334,32 @@ body {
 .card h2 {
   font-family: "Montserrat";
   font-weight: 700;
-  font-size: 20px;
+  font-size: 22px; /* slightly bigger name */
+  margin-bottom: 6px;
+}
+
+/* bigger / animated role under the name */
+.card .role {
+  font-size: 15px;           /* a bit larger than before */
+  color: var(--muted);
+  margin-top: 4px;
+  margin-bottom: 14px;
+  letter-spacing: 0.2px;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  display: block;
+  opacity: 1;
+}
+
+/* fade out / translate when switching */
+.card .role.fade-out {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+/* optional fade-in class (JS will remove it) */
+.card .role.fade-in {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .card p {
