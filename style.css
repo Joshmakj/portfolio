@@ -1003,3 +1003,48 @@ section#education h2 span {
     margin-bottom: 16px;
   }
 }
+
+@media (max-width: 480px) {
+  /* make the profile card flow naturally on narrow screens */
+  .card {
+    width: calc(100% - 40px);
+    min-height: auto;                 /* remove forced tall height */
+    padding: 20px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;      /* keep items stacked from top */
+    align-items: center;
+    margin: 20px 0;
+  }
+
+  .card img {
+    width: 100%;
+    height: 320px;                    /* larger, consistent image */
+    object-fit: cover;
+    border-radius: 14px;
+    margin-bottom: 16px;
+  }
+
+  .card h2 {
+    font-size: 20px;
+    margin: 6px 0 6px;
+    text-align: center;
+  }
+
+  .card .role {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .socials {
+    margin-bottom: 16px;
+  }
+
+  .cv-btn {
+    width: 100%;
+    margin-top: 4px;
+  }
+}
