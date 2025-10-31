@@ -28,7 +28,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (mainContainer) mainContainer.style.display = "flex";
       } else {
         const sec = document.getElementById(target);
-        if (sec) sec.style.display = "block";
+        if (sec) {
+          sec.style.display = "block";
+          // add class to trigger entrance animations
+          sec.classList.add('show');
+        }
+      }
+
+      // if about shown, animate skill bars
+      if (target === 'about') {
+        animateSkillBars();
       }
 
       // Close sidebar after click
@@ -127,5 +136,52 @@ document.addEventListener('DOMContentLoaded', () => {
       }, fadeTime);
     }, duration);
   })();
+
+  // animate skill bars inside About
+  function animateSkillBars() {
+    const about = document.getElementById('about');
+    if (!about) return;
+    about.classList.add('show');
+
+    const bars = about.querySelectorAll('.skill-bar');
+    bars.forEach(bar => {
+      const percent = parseInt(bar.getAttribute('data-percent') || '0', 10);
+      const inner = bar.querySelector('i');
+      if (inner) {
+        // small delay for stagger effect
+        const delay = 120 * Array.from(bars).indexOf(bar);
+        setTimeout(() => {
+          inner.style.width = percent + '%';
+        }, delay);
+      }
+    });
+  }
+
+  // If About is visible on load, animate
+  if (document.getElementById('about') && document.getElementById('about').style.display !== 'none') {
+    animateSkillBars();
+  }
+
+  // About CTA -> show contact
+  const aboutContactBtn = document.getElementById('aboutContactBtn');
+  if (aboutContactBtn) {
+    aboutContactBtn.addEventListener('click', () => {
+      sections.forEach(sec => {
+        const el = document.getElementById(sec);
+        if (el) el.style.display = "none";
+      });
+      const contactSection = document.getElementById("contact");
+      const mainContainer = document.querySelector(".container");
+      if (mainContainer) mainContainer.style.display = "none";
+      if (contactSection) contactSection.style.display = "block";
+
+
+
+
+
+});  }    });      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 80);      // scroll to top of contact      // scroll to top of contact
+      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 80);
+    });
+  }
 
 });
