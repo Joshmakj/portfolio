@@ -1289,3 +1289,49 @@ section#education h2 span {
   .project-card img { height: 160px; object-fit: cover; }
   #contact .contact-container { padding: 16px !important; }
 }
+
+/* Force contact to stack cleanly on small screens (overrides inline styles) */
+@media (max-width: 520px) {
+  #contact .contact-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+    padding: 16px !important;
+    max-width: 420px !important;
+    margin: 12px auto !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Make info and form full width and remove inline min-width */
+  #contact .contact-info,
+  #contact .contact-form {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: none !important;
+  }
+
+  /* Ensure each contact-info card fills width and doesn't sit side-by-side */
+  #contact .contact-info > div {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Stack form rows and make inputs/buttons full width */
+  #contact .contact-form .form-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  #contact .contact-form input,
+  #contact .contact-form textarea,
+  #contact #bbb {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* smaller paddings to fit mobile */
+  #contact .contact-form {
+    padding: 14px !important;
+  }
+}
