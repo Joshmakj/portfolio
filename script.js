@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-/* ---------- Page Loader: high-density particle field ---------- */
+/* ---------- Page Loader: high-density star field (15s, small stars) ---------- */
 (function initPageLoader() {
   const overlay = document.getElementById('loader-overlay');
   const canvas = document.getElementById('loader-canvas');
@@ -209,15 +209,18 @@ document.addEventListener('DOMContentLoaded', () => {
   let DPR = Math.max(1, window.devicePixelRatio || 1);
   let W = 0, H = 0;
   let particles = [];
-  let animId = null;
+  let raf = null;
   let mouse = { x: -9999, y: -9999 };
 
-  // density control: aim thousands on large screens but cap
+  const LOADER_DURATION = 15000; // 15 seconds
+  let hideTimeout = null;
+
+  // compute particle count (thousands on large screens), but keep them very small
   function particleCountForSize(w, h) {
     const area = w * h;
-    // one particle per ~60k px for moderate count; tweak factor for more/less
-    const count = Math.round(area / 60000);
-    return Math.min(Math.max(800, count), 3000); // clamp to 800..3000
+    // one particle per ~80k px -> yields 1000-2500 depending on screen
+    const count = Math.round(area / 80000);
+    return Math.min(Math.max(1000, count), 3500); // clamp 1000..3500
   }
 
   function resize() {
@@ -229,7 +232,6 @@ document.addEventListener('DOMContentLoaded', () => {
     canvas.style.width = W + 'px';
     canvas.style.height = H + 'px';
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    // recreate particles to match new size
     createParticles();
   }
 
@@ -237,28 +239,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const count = particleCountForSize(W, H);
     particles = new Array(count);
     for (let i = 0; i < count; i++) {
-      const size = 0.6 + Math.random() * 2.6; // small dots
+      // very small stars
+      const r = 0.4 + Math.random() * 1.6; // core radius (px)
       particles[i] = {
         x: Math.random() * W,
         y: Math.random() * H,
-        vx: (Math.random() - 0.5) * 0.6,
-        vy: (Math.random() - 0.5) * 0.6,
-        r: size,
-        hue: 105 + Math.random() * 60, // greenish-yellow range
-        alpha: 0.04 + Math.random() * 0.18,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        r: r,
+        hue: Math.random() < 0.82 ? 60 + Math.random() * 30 : 200 + Math.random() * 30, // mostly warm yellow, some bluish
+        alpha: 0.5 + Math.random() * 0.9,
         tw: Math.random() * Math.PI * 2,
-        twS: 0.004 + Math.random() * 0.012
+        twS: 0.006 + Math.random() * 0.014
       };
     }
   }
 
-  // mouse parallax
+  // pointer interaction (soft parallax)
   window.addEventListener('mousemove', (e) => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
   }, { passive: true });
-
-  // gentle touch fallback (mobile)
   window.addEventListener('touchstart', (e) => {
     const t = e.touches[0];
     mouse.x = t.clientX;
@@ -268,83 +269,86 @@ document.addEventListener('DOMContentLoaded', () => {
   function draw() {
     ctx.clearRect(0, 0, W, H);
 
-    // subtle background vignette
-    const g = ctx.createLinearGradient(0, 0, 0, H);
-    g.addColorStop(0, 'rgba(0,0,0,0.02)');
-    g.addColorStop(1, 'rgba(0,0,0,0.02)');
-    ctx.fillStyle = g;
+    // pure black background for strong contrast
+    ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, W, H);
 
-    // draw particles
+    // draw stars (small radial gradients for glow)
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
 
-      // twinkle
+      // twinkle factor
       p.tw += p.twS;
       const flick = 0.6 + Math.sin(p.tw) * 0.6;
 
-      // mouse repulse / parallax
+      // subtle movement + pointer parallax
       if (mouse.x > -9000) {
-        const dx = (p.x - mouse.x) * 0.0006;
-        const dy = (p.y - mouse.y) * 0.0006;
-        p.x += p.vx + (dx * (Math.random() * 6));
-        p.y += p.vy + (dy * (Math.random() * 6));
+        const dx = (mouse.x - W * 0.5) * 0.00006;
+        const dy = (mouse.y - H * 0.5) * 0.00006;
+        p.x += p.vx + dx * (Math.random() * 6);
+        p.y += p.vy + dy * (Math.random() * 6);
       } else {
         p.x += p.vx;
         p.y += p.vy;
       }
 
-      // wrap
-      if (p.x < -30) p.x = W + 30;
-      if (p.x > W + 30) p.x = -30;
-      if (p.y < -30) p.y = H + 30;
-      if (p.y > H + 30) p.y = -30;
+      // wrap around
+      if (p.x < -10) p.x = W + 10;
+      if (p.x > W + 10) p.x = -10;
+      if (p.y < -10) p.y = H + 10;
+      if (p.y > H + 10) p.y = -10;
 
-      // draw soft dot using radial gradient
-      const rad = Math.max(0.6, p.r * flick);
-      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad * 6);
-      grad.addColorStop(0, `hsla(${p.hue},70%,60%, ${p.alpha})`);
-      grad.addColorStop(0.25, `hsla(${p.hue},65%,45%, ${p.alpha * 0.6})`);
+      const size = Math.max(0.4, p.r * flick);
+      // star core (bright)
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, size * 6);
+      const colorCenter = `hsla(${p.hue}, 95%, 70%, ${Math.min(1, p.alpha)})`;
+      const colorMid = `hsla(${p.hue}, 80%, 55%, ${Math.min(0.35, p.alpha * 0.45)})`;
+      grad.addColorStop(0, colorCenter);
+      grad.addColorStop(0.15, colorMid);
       grad.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = grad;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, rad * 4, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, Math.max(1, size * 4), 0, Math.PI * 2);
       ctx.fill();
     }
 
-    animId = requestAnimationFrame(draw);
+    raf = requestAnimationFrame(draw);
   }
 
-  // start animation
   function start() {
-    cancelAnimationFrame(animId);
+    cancelAnimationFrame(raf);
     resize();
     draw();
+
+    // set auto-hide after LOADER_DURATION if still visible
+    if (hideTimeout) clearTimeout(hideTimeout);
+    hideTimeout = setTimeout(() => {
+      hideOverlay();
+    }, LOADER_DURATION);
   }
 
-  // stop animation and cleanup
-  function stop() {
-    if (animId) cancelAnimationFrame(animId);
-    window.removeEventListener('resize', resize);
-    window.removeEventListener('mousemove', () => {});
-    window.removeEventListener('touchstart', () => {});
-  }
-
-  // hide overlay when page fully loaded
-  window.addEventListener('load', () => {
-    // fade overlay
+  function hideOverlay() {
+    if (!overlay) return;
     overlay.classList.add('hidden');
-    // stop animation after fade
+    // give fade time, then remove canvas and listeners
     setTimeout(() => {
-      stop();
-      // remove overlay from DOM to avoid blocking interactions (optional)
-      if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
-    }, 700);
+      cancelAnimationFrame(raf);
+      // cleanup listeners
+      window.removeEventListener('mousemove', () => {});
+      window.removeEventListener('touchstart', () => {});
+      window.removeEventListener('resize', resize);
+      try { overlay.remove(); } catch (e) { /* ignore */ }
+    }, 600);
+  }
+
+  // hide early if page fully loads
+  window.addEventListener('load', () => {
+    hideOverlay();
+    if (hideTimeout) clearTimeout(hideTimeout);
   });
 
-  // handle resize
   window.addEventListener('resize', resize, { passive: true });
 
-  // start now
+  // start
   start();
 })();
