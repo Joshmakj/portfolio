@@ -1335,3 +1335,98 @@ section#education h2 span {
     padding: 14px !important;
   }
 }
+
+/* Responsive overrides for Contact (mobile stacking only) */
+@media (max-width: 720px) {
+  /* Reduce outer padding on narrow screens */
+  #contact {
+    padding: 24px 12px !important;
+  }
+
+  /* Force column layout and centered, constrained width */
+  #contact .contact-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    align-items: stretch !important;
+    max-width: 420px !important;
+    width: 100% !important;
+    margin: 12px auto !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Make both info and form full width and remove inline min-width */
+  #contact .contact-info,
+  #contact .contact-form {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: none !important;
+  }
+
+  /* Ensure each contact-info block fills the width and items align */
+  #contact .contact-info > div {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    box-sizing: border-box;
+  }
+
+  /* Make form card padding smaller so it fits */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}  }    height: 52px !important;    width: 100% !important;  #bbb {  /* Full width send button */  }    min-height: 120px !important;  #contact .contact-form textarea {  /* textarea comfortable height on mobile */  }    box-sizing: border-box !important;    width: 100% !important;  #contact .contact-form textarea {  #contact .contact-form .form-row input,  }    gap: 12px !important;    flex-direction: column !important;    display: flex !important;  #contact .contact-form .form-row {  /* Stack form rows and make inputs full width */  }    border-radius: 12px !important;    padding: 18px !important;  #contact .contact-form {  #contact .contact-form {
+    padding: 18px !important;
+    border-radius: 12px !important;
+  }
+
+  /* Stack form rows and make inputs full width */
+  #contact .contact-form .form-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  #contact .contact-form .form-row input,
+  #contact .contact-form textarea {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* textarea comfortable height on mobile */
+  #contact .contact-form textarea {
+    min-height: 120px !important;
+  }
+
+  /* Full width send button */
+  #bbb {
+    width: 100% !important;
+    height: 52px !important;
+  }
+}
