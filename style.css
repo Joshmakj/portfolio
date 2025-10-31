@@ -1466,3 +1466,40 @@ section#education h2 span {
     width: 100%;
   }
 }
+
+/* Center Projects on small screens when opened from sidebar/nav */
+@media (max-width: 720px) {
+  #projects {
+    padding: 40px 12px !important;
+    box-sizing: border-box;
+  }
+
+  /* single column, constrained width and centered */
+  #projects .projects-grid {
+    grid-template-columns: 1fr !important;
+    max-width: 420px;
+    margin: 0 auto;
+    gap: 18px;
+    padding: 0;
+    box-sizing: border-box;
+    justify-items: stretch;
+  }
+
+  /* make each card full width inside the centered column */
+  #projects .project-card {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* tighten card inner spacing so it looks balanced */
+  #projects .project-info {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  /* ensure section title stays centered */
+  #projects .section-title,
+  #projects h2 {
+    text-align: center;
+  }
+}
