@@ -1503,3 +1503,32 @@ section#education h2 span {
     text-align: center;
   }
 }
+
+/* background particle canvas (keeps existing styles intact) */
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0; /* behind everything */
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: contrast(1.02) saturate(1.05) blur(0.6px);
+  opacity: 0.9;
+}
+body > * { /* ensure main content stays above canvas */
+  position: relative;
+  z-index: 1;
+}
+/* Optional: subtle radial glow overlay for depth */
+.bg-glow::after {
+  content: "";
+  position: fixed;
+  left: 6%;
+  top: 8%;
+  width: 620px;
+  height: 720px;
+  background: radial-gradient(circle at 30% 20%, rgba(120,209,61,0.06), transparent 30%);
+  pointer-events: none;
+  z-index: 0;
+}
