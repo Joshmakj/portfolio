@@ -315,6 +315,10 @@ body {
   /* center contents inside the card */
   align-items: center;
   text-align: center;
+  position: relative;
+  z-index: 3;
+  transition: transform .35s, box-shadow .35s;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 4px 20px rgba(120,209,61,0.03);
 }
 .card:hover { transform: translateY(-6px); }
 
@@ -415,12 +419,14 @@ body {
   border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.04);
   padding: 40px 38px;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 8px 40px rgba(120,209,61,0.06);
   overflow: hidden;
   min-height: 520px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  position: relative;
+  z-index: 2;
 }
 
 /* hero title */
@@ -1055,4 +1061,55 @@ section#education h2 span {
     width: 100%;
     margin-top: 4px;
   }
+}
+
+/* Home section subtle glow + card halo */
+.hero {
+  position: relative;
+  z-index: 2;
+  /* keep existing box-shadow and add a soft neon glow */
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 8px 40px rgba(120,209,61,0.06);
+}
+
+/* ambient halo using pseudo-element so glow doesn't clip */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -30px;                  /* extend glow beyond the hero */
+  border-radius: inherit;
+  background: radial-gradient(circle at 20% 20%, rgba(120,209,61,0.06), transparent 25%),
+              radial-gradient(circle at 80% 80%, rgba(120,209,61,0.04), transparent 25%);
+  z-index: 1;
+  pointer-events: none;
+  filter: blur(24px);
+}
+
+/* Card halo */
+.card {
+  position: relative;
+  z-index: 3;
+  transition: transform .35s, box-shadow .35s;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 4px 20px rgba(120,209,61,0.03);
+}
+
+/* stronger glow on hover */
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.65), 0 12px 40px rgba(120,209,61,0.18);
+}
+
+/* subtle glow behind the whole container for depth */
+.container::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 1400px;
+  height: 600px;
+  background: radial-gradient(ellipse at center, rgba(120,209,61,0.03), transparent 35%);
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(40px);
+  border-radius: 20px;
 }
