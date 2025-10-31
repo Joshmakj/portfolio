@@ -1,6 +1,6 @@
 html {
-  /* reduce root scaling so headings don't grow too large on wide screens */
-  font-size: clamp(15px, 0.8vw + 12px, 18px);
+  /* slightly larger root so everything scales up a bit */
+  font-size: clamp(16px, 1vw + 13px, 19px);
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -292,10 +292,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: stretch;
-  gap: 40px; /* slightly reduced gap */
-  max-width: 1100px; /* a touch narrower */
-  margin: 70px auto;
-  padding: 18px;
+  gap: 50px;          /* a bit more space */
+  max-width: 1200px;  /* allow wider hero on large screens */
+  margin: 80px auto;  /* slightly larger top spacing */
+  padding: 20px;
   position: relative;
   z-index: 2;
   top: -50px;
@@ -303,29 +303,23 @@ body {
 
 /* ==== Profile Card ==== */
 .card {
-  width: 320px;
-  background: var(--card-bg);
-  border: 1px solid rgba(255,255,255,0.05);
+  width: 340px;
+  min-height: 520px; /* match hero height */
+  padding: 22px;
   border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-  text-align: center;
-  transition: transform .4s;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-self: stretch;
-  min-height: 480px;
 }
 .card:hover { transform: translateY(-6px); }
 
 .card img {
   width: 100%;
-  height: 300px;
+  height: 320px;
   object-fit: cover;
   border-radius: 14px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   border: 1px solid rgba(255,255,255,0.05);
 }
 
@@ -412,10 +406,10 @@ body {
   background: rgba(255,255,255,0.02);
   border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.04);
-  padding: 36px 34px;
+  padding: 40px 38px;
   box-shadow: 0 30px 80px rgba(0,0,0,0.6);
   overflow: hidden;
-  min-height: 480px;
+  min-height: 520px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -425,23 +419,30 @@ body {
 .hero h1 {
   font-family: "Montserrat", sans-serif;
   font-weight: 800;
-  font-size: clamp(28px, 3.2vw + 12px, 56px);
+  font-size: clamp(30px, 3.4vw + 14px, 62px);
   line-height: 1.04;
-  margin: 6px 0 14px;
+  margin: 6px 0 16px;
   word-break: break-word;
 }
 
-/* safer highlight: smaller vertical padding, prevents overlap and keeps rounded corners */
+/* Highlight fix:
+   - inline-block so padding doesn't push into other lines
+   - smaller vertical padding and matching line-height
+   - allow wrapping (remove nowrap) so it won't overflow/overlap
+   - box-decoration-break to keep rounded corners on wraps
+*/
 .hero h1 span {
-  display: inline;                      /* use inline to avoid odd block wrapping */
+  display: inline-block;
   background: linear-gradient(90deg, var(--accent), #5fc02d);
   color: #0b0b0c;
-  padding: 0.08em 0.3em;               /* em-based padding scales with font */
-  border-radius: 0.45em;
+  padding: 0.09em 0.34em;   /* smaller vertical padding */
+  border-radius: 0.42em;
+  line-height: 1;           /* prevents extra height */
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
-  vertical-align: middle;
-  white-space: nowrap;                  /* keep the highlighted word on a single piece to avoid multi-line boxes */
+  vertical-align: baseline;
+  white-space: normal;      /* allow the word to wrap if needed */
+  word-break: break-word;
 }
 
 .hero h3 {
