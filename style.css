@@ -304,13 +304,17 @@ body {
 /* ==== Profile Card ==== */
 .card {
   width: 340px;
-  min-height: 520px; /* match hero height */
+  min-height: 520px;
   padding: 22px;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-self: stretch;
+
+  /* center contents inside the card */
+  align-items: center;
+  text-align: center;
 }
 .card:hover { transform: translateY(-6px); }
 
@@ -319,23 +323,22 @@ body {
   height: 320px;
   object-fit: cover;
   border-radius: 14px;
-  margin-bottom: 14px;
+  margin-bottom: 18px; /* slightly larger gap above name */
   border: 1px solid rgba(255,255,255,0.05);
 }
 
 .card h2 {
   font-family: "Montserrat";
   font-weight: 700;
-  font-size: 22px; /* slightly bigger name */
-  margin-bottom: 6px;
+  font-size: 24px; /* increased */
+  margin: 8px 0 6px;
 }
 
-/* bigger / animated role under the name */
+/* role larger and with better spacing */
 .card .role {
-  font-size: 15px;           /* a bit larger than before */
+  font-size: 16px;           /* increased */
   color: var(--muted);
-  margin-top: 4px;
-  margin-bottom: 14px;
+  margin: 6px 0 16px;
   letter-spacing: 0.2px;
   transition: opacity 0.35s ease, transform 0.35s ease;
   display: block;
@@ -365,40 +368,45 @@ body {
 .socials {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 14px;
   margin-bottom: 18px;
 }
 
 .socials a {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--muted);
-  border: 1px solid rgba(255,255,255,0.06);
-  transition: 0.3s;
+  color: var(--neon-green); /* icons green */
+  border: 1px solid rgba(120,209,61,0.12);
+  background: rgba(120,209,61,0.03);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.socials a i {
+  font-size: 18px; /* bigger icon */
+  color: inherit;
 }
 .socials a:hover {
-  color: var(--accent);
-  border-color: rgba(120,209,61,0.3);
-  transform: translateY(-5px);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(120,209,61,0.12);
 }
 
+/* center / restrict width of CV button so it looks balanced */
 .cv-btn {
-  display: inline-block;
-  padding: 10px 20px;
-  width: 100%;
+  display: block;
+  width: 90%;
+  max-width: 320px;
+  margin: 12px auto 0;
+  padding: 12px 18px;
   border-radius: 10px;
   background: linear-gradient(90deg, #78d13d, #5fc02d);
   color: #0b0b0c;
   font-weight: 700;
+  text-align: center;
   text-decoration: none;
-  transition: 0.3s;
-  font-size: 14px;
 }
-.cv-btn:hover { opacity: 0.9; }
 
 /* ==== Hero ==== */
 .hero {
