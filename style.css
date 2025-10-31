@@ -1217,3 +1217,92 @@ section#education h2 span {
   filter: blur(40px);
   border-radius: 20px;
 }
+
+/* About visual improvements */
+.about-decor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+  justify-content: flex-start;
+}
+.about-decor .dot {
+  width: 10px;
+  height: 10px;
+  background: linear-gradient(90deg,var(--accent),#5fc02d);
+  border-radius: 50%;
+  box-shadow: 0 6px 18px rgba(120,209,61,0.12);
+}
+.about-decor .line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(120,209,61,0.12), transparent);
+  border-radius: 2px;
+}
+
+.about-highlight {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 6px;
+}
+
+.highlight-list {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.highlight-item {
+  background: linear-gradient(180deg, rgba(120,209,61,0.06), rgba(120,209,61,0.02));
+  border: 1px solid rgba(120,209,61,0.08);
+  padding: 10px 14px;
+  border-radius: 12px;
+  color: var(--text);
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+}
+
+.about-quote {
+  color: var(--muted);
+  font-style: italic;
+  font-size: 15px;
+  border-left: 3px solid rgba(120,209,61,0.12);
+  padding-left: 12px;
+  margin-top: 4px;
+  max-width: 720px;
+}
+
+/* slightly larger, more prominent CTAs inside about */
+.about-cta .btn {
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 15px;
+}
+.btn-cta { box-shadow: 0 10px 30px rgba(120,209,61,0.08); }
+.btn-outline-ghost { border-color: rgba(255,255,255,0.06); }
+
+/* small animation for the heading for subtle attractiveness */
+.about-right h2 {
+  position: relative;
+  overflow: visible;
+}
+.about-right h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 36%;
+  height: 6px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgba(120,209,61,0.95), rgba(120,209,61,0.6));
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 520ms cubic-bezier(.2,.9,.25,1);
+}
+.about-section.show .about-right h2::after {
+  transform: scaleX(1);
+}
