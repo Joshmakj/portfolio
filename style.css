@@ -318,6 +318,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   align-self: stretch;
+  min-height: 520px; /* ensures the card height matches the hero */
 }
 .card:hover { transform: translateY(-6px); }
 
@@ -388,32 +389,36 @@ body {
   background: rgba(255,255,255,0.02);
   border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.04);
-  padding: 45px 40px;
+  padding: 48px 44px;
   box-shadow: 0 30px 80px rgba(0,0,0,0.6);
   overflow: hidden;
-
-  /* ensure hero defines a comfortable height for large screens */
-  min-height: 520px;
+  min-height: 520px; /* keeps hero large on wide screens */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
-/* Make the green highlight behave correctly when text wraps */
+/* hero title */
 .hero h1 {
-  font-family: "Montserrat";
+  font-family: "Montserrat", sans-serif;
   font-weight: 800;
-  font-size: clamp(34px, 4.5vw + 18px, 72px);
-  line-height: 1.05;
-  margin-bottom: 10px;
+  font-size: clamp(34px, 4.2vw + 18px, 72px);
+  line-height: 1.06;
+  margin: 6px 0 18px;
   word-break: break-word;
 }
+
+/* safer highlight: smaller vertical padding, prevents overlap and keeps rounded corners */
 .hero h1 span {
-  display: inline-block;               /* prevents odd overlap when wrapping */
-  background: var(--accent);
+  display: inline;                      /* use inline to avoid odd block wrapping */
+  background: linear-gradient(90deg, var(--accent), #5fc02d);
   color: #0b0b0c;
-  padding: 6px 10px;                   /* smaller vertical padding to avoid covering other lines */
-  border-radius: 6px;
-  box-decoration-break: clone;         /* ensure rounded bg on wrapped lines */
+  padding: 0.12em 0.38em;               /* em-based padding scales with font */
+  border-radius: 0.45em;
+  box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
-  line-height: 1;
+  vertical-align: middle;
+  white-space: nowrap;                  /* keep the highlighted word on a single piece to avoid multi-line boxes */
 }
 
 .hero h3 {
