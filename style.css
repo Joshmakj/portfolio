@@ -291,9 +291,10 @@ body {
 .container {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  /* changed: stretch children so card matches hero height */
+  align-items: stretch; /* was align-items: flex-start; */
   gap: 50px;
-  max-width: 1200px; /* allow content to be larger on wide screens */
+  max-width: 1200px;
   margin: 90px auto;
   padding: 20px;
   position: relative;
@@ -303,20 +304,26 @@ body {
 
 /* ==== Profile Card ==== */
 .card {
-  width: 300px;
+  width: 360px;                        /* slightly wider card */
   background: var(--card-bg);
   border: 1px solid rgba(255,255,255,0.05);
   border-radius: 20px;
-  padding: 20px;
+  padding: 22px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.6);
   text-align: center;
   transition: transform .4s;
+
+  /* stretch and distribute content so card height matches hero */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-self: stretch;
 }
 .card:hover { transform: translateY(-6px); }
 
 .card img {
   width: 100%;
-  height: 280px;
+  height: 360px;                       /* larger profile image to match taller card */
   object-fit: cover;
   border-radius: 16px;
   margin-bottom: 14px;
@@ -384,28 +391,31 @@ body {
   padding: 45px 40px;
   box-shadow: 0 30px 80px rgba(0,0,0,0.6);
   overflow: hidden;
+
+  /* ensure hero defines a comfortable height for large screens */
+  min-height: 520px;
 }
-.hero .intro {
-  color: var(--accent);
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
+
+/* Make the green highlight behave correctly when text wraps */
 .hero h1 {
   font-family: "Montserrat";
   font-weight: 800;
   font-size: clamp(34px, 4.5vw + 18px, 72px);
   line-height: 1.05;
   margin-bottom: 10px;
+  word-break: break-word;
 }
 .hero h1 span {
+  display: inline-block;               /* prevents odd overlap when wrapping */
   background: var(--accent);
   color: #0b0b0c;
-  padding: 0 6px;
+  padding: 6px 10px;                   /* smaller vertical padding to avoid covering other lines */
   border-radius: 6px;
+  box-decoration-break: clone;         /* ensure rounded bg on wrapped lines */
+  -webkit-box-decoration-break: clone;
+  line-height: 1;
 }
+
 .hero h3 {
   color: var(--muted);
   font-weight: 400;
@@ -499,8 +509,8 @@ body {
 }
 
 .about-left img {
-  width: 300px;
-  height: 300px;
+  width: 360px;
+  height: 360px;
   border-radius: 20px;
   object-fit: cover;
   border: 3px solid var(--accent);
@@ -508,7 +518,7 @@ body {
 }
 
 .about-right {
-  max-width: 550px;
+  max-width: 700px; /* give about text more room */
 }
 
 .about-right h2 {
