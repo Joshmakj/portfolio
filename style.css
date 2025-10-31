@@ -1217,3 +1217,75 @@ section#education h2 span {
   filter: blur(40px);
   border-radius: 20px;
 }
+
+/* Projects: force 3 columns on wide screens and green bordered cards */
+@media (min-width: 992px) {
+  .projects-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+/* Ensure cards have a subtle green border and glow by default */
+.project-card {
+  border: 1px solid rgba(120,209,61,0.18) !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.55), 0 0 18px rgba(120,209,61,0.06);
+  transition: transform 360ms ease, box-shadow 360ms ease, border-color 360ms ease;
+}
+.project-card:hover {
+  border-color: rgba(120,209,61,0.36) !important;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.6), 0 8px 40px rgba(120,209,61,0.18);
+  transform: translateY(-8px);
+}
+
+/* Ensure arrow is visible / animates */
+.project-card .arrow i {
+  opacity: 1;
+  transform: translateX(0);
+  transition: transform .4s ease, opacity .3s ease;
+}
+
+/* Contact: responsive stacking on small screens (override inline styles) */
+@media (max-width: 880px) {
+  #contact .contact-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 18px !important;
+    padding: 22px !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  #contact .contact-info,
+  #contact .contact-form {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: none !important;
+  }
+
+  /* Stack form rows and full-width inputs */
+  #contact .contact-form .form-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  #contact .contact-form .form-row input,
+  #contact .contact-form textarea {
+    width: 100% !important;
+  }
+
+  /* Make submit button full width */
+  #bbb {
+    width: 100% !important;
+    height: 52px !important;
+  }
+}
+
+/* Very small screens adjustments */
+@media (max-width: 480px) {
+  .projects-grid { gap: 18px; padding: 0 12px; }
+  .project-card img { height: 160px; object-fit: cover; }
+  #contact .contact-container { padding: 16px !important; }
+}
