@@ -246,19 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     CENTER.y = H / 2;
     createParticles();
     // adjust overlay center/content for very small screens
-    // alignItems + paddingTop so content doesn't get hidden by device UI (status bar/notch)
-    if (H < 520 || W < 400) {
-      overlay.style.alignItems = 'flex-start';
-      overlay.style.paddingTop = Math.max(18, Math.round(Math.min(48, H * 0.06))) + 'px';
-      // reduce vertical translate so it sits naturally near top
-      const center = overlay.querySelector('.loader-center');
-      if (center) center.style.transform = 'translateY(0)';
-    } else {
-      overlay.style.alignItems = 'center';
-      overlay.style.paddingTop = '0';
-      const center = overlay.querySelector('.loader-center');
-      if (center) center.style.transform = 'translateY(-20px)';
-    }
+    overlay.style.alignItems = (H < 420) ? 'flex-start' : 'center';
   }
 
   function createParticles() {
