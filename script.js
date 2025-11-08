@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Hire Me button -> show contact
+ 
   const hireMeBtn = document.getElementById("hireMeBtn");
   if (hireMeBtn) {
     hireMeBtn.addEventListener("click", () => {
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Role rotation animation for the profile card
+  
   (function rotateProfileRole() {
     const roleEl = document.querySelector('.card .role');
     if (!roleEl) return;
@@ -129,30 +129,27 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     let idx = 0;
-    const duration = 3000; // ms each role is visible
-    const fadeTime = 350;  // should match CSS transition
+    const duration = 3000; 
+    const fadeTime = 350; 
 
-    // Initialize text
+
     roleEl.textContent = roles[0];
 
     setInterval(() => {
-      // fade out
+   
       roleEl.classList.add('fade-out');
 
-      // after fade out, swap text and fade in
       setTimeout(() => {
         idx = (idx + 1) % roles.length;
         roleEl.textContent = roles[idx];
         roleEl.classList.remove('fade-out');
         roleEl.classList.add('fade-in');
 
-        // remove fade-in after animation completes
         setTimeout(() => roleEl.classList.remove('fade-in'), fadeTime);
       }, fadeTime);
     }, duration);
   })();
 
-  // animate skill bars inside About
   function animateSkillBars() {
     const about = document.getElementById('about');
     if (!about) return;
@@ -163,9 +160,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const percent = parseInt(bar.getAttribute('data-percent') || '0', 10);
       const inner = bar.querySelector('i');
       if (inner) {
-        // small delay for stagger effect
+      
         const delay = 120 * i;
-        // reset before animating (allows repeat)
+       
         inner.style.width = '0%';
         setTimeout(() => {
           inner.style.width = percent + '%';
@@ -174,13 +171,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // If About is visible on load, animate
+
   const aboutOnLoad = document.getElementById('about');
   if (aboutOnLoad && aboutOnLoad.style.display !== 'none') {
     animateSkillBars();
   }
 
-  // About CTA -> show contact
+
   const aboutContactBtn = document.getElementById('aboutContactBtn');
   if (aboutContactBtn) {
     aboutContactBtn.addEventListener('click', () => {
@@ -199,7 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-/* ---------- Page Loader: center-burst starfield (fast outward burst, white stars) ---------- */
 (function initPageLoader() {
   const overlay = document.getElementById('loader-overlay');
   const canvas = document.getElementById('loader-canvas');
@@ -210,17 +206,31 @@ document.addEventListener('DOMContentLoaded', () => {
   let W = 0, H = 0;
   let particles = [];
   let raf = null;
-  const MIN_VISIBLE = 15000; // ensure loader stays at least 15s
-  const MAX_VISIBLE = 35000; // safety max 35s
+  const MIN_VISIBLE = 5000; // ensure loader stays at least 5s (changed)
+  const MAX_VISIBLE = 8000; // safety max 8s (changed)
   let startTime = Date.now();
   let hideScheduled = false;
   const CENTER = { x: 0, y: 0 };
 
-  // number of particles (auto-scale)
+  // number of particles (auto-scale and much smaller on small screens)
   function particleCountForSize(w, h) {
     const area = w * h;
     const base = Math.round(area / 90000);
-    return Math.min(Math.max(1200, base), 3500);
+    // choose sensible min/max based on viewport width
+    const smallMin = 180;   // phones
+    const midMin = 500;     // tablets
+    const largeMin = 1200;  // desktop
+    const smallMax = 700;
+    const midMax = 1500;
+    const largeMax = 3500;
+
+    if (w <= 520) {
+      return Math.min(Math.max(smallMin, base), smallMax);
+    } else if (w <= 900) {
+      return Math.min(Math.max(midMin, base), midMax);
+    } else {
+      return Math.min(Math.max(largeMin, base), largeMax);
+    }
   }
 
   function resize() {
@@ -235,6 +245,20 @@ document.addEventListener('DOMContentLoaded', () => {
     CENTER.x = W / 2;
     CENTER.y = H / 2;
     createParticles();
+    // adjust overlay center/content for very small screens
+    // alignItems + paddingTop so content doesn't get hidden by device UI (status bar/notch)
+    if (H < 520 || W < 400) {
+      overlay.style.alignItems = 'flex-start';
+      overlay.style.paddingTop = Math.max(18, Math.round(Math.min(48, H * 0.06))) + 'px';
+      // reduce vertical translate so it sits naturally near top
+      const center = overlay.querySelector('.loader-center');
+      if (center) center.style.transform = 'translateY(0)';
+    } else {
+      overlay.style.alignItems = 'center';
+      overlay.style.paddingTop = '0';
+      const center = overlay.querySelector('.loader-center');
+      if (center) center.style.transform = 'translateY(-20px)';
+    }
   }
 
   function createParticles() {
@@ -243,34 +267,34 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < count; i++) {
       const jitter = (Math.random() - 0.5) * 6;
       const angle = Math.random() * Math.PI * 2;
-      const speed = 2.6 + Math.random() * 6.0;
+      const speed = 1.2 + Math.random() * 4.0; // reduced speeds for smaller counts
       const vx = Math.cos(angle) * speed;
       const vy = Math.sin(angle) * speed;
-      const core = 0.4 + Math.random() * 1.6;
+      const core = 0.3 + Math.random() * 1.2;
       particles[i] = {
         x: CENTER.x + jitter,
         y: CENTER.y + jitter,
         vx,
         vy,
         r: core,
-        alpha: 0.7 + Math.random() * 0.6,
+        alpha: 0.6 + Math.random() * 0.6,
         life: 0,
-        maxLife: 40 + Math.round(Math.random() * 160)
+        maxLife: 30 + Math.round(Math.random() * 120)
       };
     }
   }
 
   function respawn(p) {
     const angle = Math.random() * Math.PI * 2;
-    const speed = 1.8 + Math.random() * 7.0;
+    const speed = 0.9 + Math.random() * 5.0;
     p.x = CENTER.x + (Math.random() - 0.5) * 4;
     p.y = CENTER.y + (Math.random() - 0.5) * 4;
     p.vx = Math.cos(angle) * speed;
     p.vy = Math.sin(angle) * speed;
-    p.r = 0.4 + Math.random() * 1.6;
-    p.alpha = 0.6 + Math.random() * 0.6;
+    p.r = 0.3 + Math.random() * 1.2;
+    p.alpha = 0.5 + Math.random() * 0.6;
     p.life = 0;
-    p.maxLife = 40 + Math.round(Math.random() * 160);
+    p.maxLife = 30 + Math.round(Math.random() * 120);
   }
 
   function draw() {
@@ -291,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const alpha = Math.max(0, p.alpha * (1 - lifeT) * flick);
 
       // white glowing star (center -> bright white, mid -> softer white)
-      const size = Math.max(0.3, p.r * (1 + lifeT * 0.6));
+      const size = Math.max(0.2, p.r * (1 + lifeT * 0.6));
       const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, size * 5);
       const centerColor = `rgba(255,255,255, ${alpha})`;
       const midColor = `rgba(255,255,255, ${Math.min(0.35, alpha * 0.35)})`;
@@ -318,8 +342,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', resize);
+      window.removeEventListener('orientationchange', resize);
       try { overlay.remove(); } catch (e) {}
-    }, 600);
+    }, 420);
   }
 
   function start() {
@@ -340,6 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   window.addEventListener('resize', resize, { passive: true });
+  window.addEventListener('orientationchange', resize, { passive: true }); // responsive support
 
   // start immediately
   start();
